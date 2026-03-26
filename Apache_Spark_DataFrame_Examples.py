@@ -1,5 +1,10 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
+import shutil, os
+
+
+if os.path.exists('spark-warehouse/somepeople'):
+    shutil.rmtree('spark-warehouse/somepeople')
 
 spark = SparkSession.builder.master('spark://localhost:7077').getOrCreate()
 # spark = SparkSession.builder.master('yarn').getOrCreate()
@@ -28,6 +33,6 @@ spark.sql("DROP TABLE IF EXISTS somepeople")
 df1.write.saveAsTable('somepeople', mode='overwrite')
 spark.sql('select * from somepeople').show()
 spark.sql("insert into somepeople values ('frank', 4, 'Child')")
-spark.sql('select * from somepeople where life_stage="Chiild"').show()
+spark.sql('select * from somepeople where life_stage="Child"').show()
 
 spark.stop()
